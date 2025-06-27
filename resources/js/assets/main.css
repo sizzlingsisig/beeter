@@ -1,0 +1,22 @@
+
+:root {
+  --color-primary: #42b883;
+  --color-primary-dark: #2c9c74;
+  --color-text: black;
+  --color-bg: white;
+  --color-hover-bg: #f0f0f0;
+  --color-divider: #ccc;
+
+  --font-size-small: 0.85rem;
+  --dropdown-width: 5rem;
+  --profile-img-size: 28px;
+  --navbar-padding-y: 0.5rem;
+  --container-margin-x: 1.5rem;
+  --container-margin-lg: 3rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
