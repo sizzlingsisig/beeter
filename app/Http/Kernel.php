@@ -33,16 +33,16 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-    EnsureFrontendRequestsAreStateful::class,
-    'throttle:api',
-    \Illuminate\Routing\Middleware\SubstituteBindings::class,
-],
+            EnsureFrontendRequestsAreStateful::class,
+            'throttle:api',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
     ];
 
     /**
-     * Route middleware.
+     * Route middleware aliases.
      */
-    protected $routeMiddleware = [
+    protected $middlewareAliases = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
@@ -53,5 +53,10 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+    ];
+
+    protected $routeMiddleware =[
+    'role' => \App\Http\Middleware\RoleMiddleware::class,
+
     ];
 }

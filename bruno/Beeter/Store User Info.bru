@@ -1,0 +1,23 @@
+meta {
+  name: Store User Info
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8000/api/user-info
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer mUigmvhc3tzu1g7CpbcRik0sOtlZvr1vhfFPeBfa5ccb66e7
+}
+
+body:json {
+  {
+    "nickname": "cjhernia",
+    "bio": "Laravel + Vue developer"
+  }
+  
+}

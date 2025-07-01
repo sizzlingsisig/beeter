@@ -10,7 +10,39 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role',
+    ];
 
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function userInfo()
+    {
+        return $this->hasOne(UserInfo::class); // <- fixed
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
 }
