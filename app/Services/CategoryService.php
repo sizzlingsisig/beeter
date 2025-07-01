@@ -6,10 +6,12 @@ use App\Models\Category;
 
 class CategoryService
 {
-    public function store(array $data): Category
+
+    public function create(array $data): Category
     {
         return Category::create($data);
     }
+
 
     public function update(Category $category, array $data): Category
     {
@@ -17,9 +19,9 @@ class CategoryService
         return $category;
     }
 
-    public function destroy(Category $category): void
-{
-    $category->delete();
-}
 
+    public function delete(Category $category): void
+    {
+        $category->delete();
+    }
 }

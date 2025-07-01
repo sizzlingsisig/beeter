@@ -1,19 +1,20 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Services\CategoryService;
+use App\Http\Resources\CategoryResource;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
-use App\Http\Resources\CategoryResource;
-use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function __construct(protected CategoryService $service) {
+    protected CategoryService $service;
 
-            $this->middleware('admin')->only(['store', 'update', 'destroy']);
-
+    public function __construct(CategoryService $service)
+    {
+        $this->service = $service;
     }
 
     public function index()
@@ -23,21 +24,22 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
-        $category = $this->service->store($request->validated());
+        $this->authorize('manage categories');
+        $category = $this->service->create($request->validated());
         return new CategoryResource($category);
     }
 
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $updated = $this->service->update($category, $request->validated());
-        return new CategoryResource($updated);
+        $this->authorize('manage categories');
+        $category = $this->service->update($category, $request->validated());
+        return new CategoryResource($category);
     }
 
-   public function destroy(DestroyCategoryRequest $request, Category $category)
-{
-    $this->service->destroy($category);
-    return response()->json(['message' => 'Category deleted.']);
-}
-
-
+    public function destroy(Category $category)
+    {
+        $this->authorize('manage categories');
+        $this->service->delete($category);
+        return response()->json(null, 204);
+    }
 }
