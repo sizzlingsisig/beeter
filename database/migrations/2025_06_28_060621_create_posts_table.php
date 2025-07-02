@@ -13,10 +13,9 @@ return new class extends Migration
     $table->foreignId('user_id')->constrained()->onDelete('cascade');
     $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
 
-    // This is the key: if null → top-level post, if not null → comment or reply
     $table->foreignId('parent_id')->nullable()->constrained('posts')->onDelete('cascade');
 
-    $table->string('title')->nullable(); // May be null for comments
+    $table->string('title')->nullable();
     $table->text('content');
     $table->timestamps();
 });

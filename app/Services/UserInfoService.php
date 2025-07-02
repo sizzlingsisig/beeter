@@ -26,4 +26,4 @@ return UserInfo::where('user_id', $userId)
     ->first();
 }
 
-}
+}   

@@ -1,15 +1,21 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
+import { useRouter, RouterLink } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
 
 const email = ref("");
 const password = ref("");
 const router = useRouter();
 const auth = useAuthStore();
+
+const warning = ref(""); // For general errors (e.g. wrong credentials)
+const fieldErrors = ref({}); // For Laravel validation errors (422)
+
 const handleLogin = async () => {
+    warning.value = "";
+    fieldErrors.value = {};
     if (!email.value || !password.value) {
-        alert("Please fill in all fields.");
+        warning.value = "Please fill in all fields.";
         return;
     }
 
@@ -18,12 +24,15 @@ const handleLogin = async () => {
             email: email.value,
             password: password.value,
         });
-
-        router.push("/home"); // 👈 redirect to /home on success
+        router.push("/home");
     } catch (error) {
-        alert(
-            "Login failed: " + (error.response?.data?.message || error.message)
-        );
+        // Laravel validation errors (422)
+        if (error.errors) {
+            fieldErrors.value = error.errors;
+            warning.value = ""; // Don't show general error if field errors are present
+        } else {
+            warning.value = "Username or password is wrong. Please try again!";
+        }
     }
 };
 </script>
@@ -43,8 +52,12 @@ const handleLogin = async () => {
                         type="email"
                         class="form-control"
                         v-model.trim="email"
+                        :class="{ 'is-invalid': fieldErrors.email }"
                         required
                     />
+                    <div v-if="fieldErrors.email" class="invalid-feedback">
+                        {{ fieldErrors.email.join(", ") }}
+                    </div>
                 </div>
 
                 <div class="mb-3">
@@ -54,14 +67,22 @@ const handleLogin = async () => {
                         type="password"
                         class="form-control"
                         v-model="password"
+                        :class="{ 'is-invalid': fieldErrors.password }"
                         required
                     />
+                    <div v-if="fieldErrors.password" class="invalid-feedback">
+                        {{ fieldErrors.password.join(", ") }}
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">
                     Login
                 </button>
             </form>
+
+            <div v-if="warning" class="alert alert-warning mt-3">
+                {{ warning }}
+            </div>
 
             <div class="text-center mt-3">
                 <span>Don't have an account?</span>
@@ -77,7 +98,6 @@ button {
     color: white;
     border: none;
 }
-
 button:hover {
     background: var(--color-primary-dark);
 }

@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Services\AuthService;
+use Illuminate\Http\Request; // <-- Add this line!
 use Illuminate\Support\Facades\Auth;
 use Exception;
 
@@ -35,16 +36,18 @@ class AuthController extends Controller
                 'token' => $data['token']
             ]);
         } catch (Exception $e) {
+            // You may want to check for specific exception types
             return response()->json(['message' => 'Login failed'], 401);
         }
     }
 
-    public function logout(AuthService $service)
+    public function logout(Request $request, AuthService $service)
     {
         try {
-            $service->logout(Auth::user());
+            $user = $request->user();
+            $service->logout($user);
 
-            return response()->json(['message' => 'Logged out']);
+            return response()->json(['message' => 'Logged out successfully']);
         } catch (Exception $e) {
             return response()->json(['message' => 'Logout failed'], 500);
         }

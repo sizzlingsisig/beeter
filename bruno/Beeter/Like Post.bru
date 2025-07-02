@@ -1,0 +1,22 @@
+meta {
+  name: Like Post
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8000/api/likes
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer 63laAFzcOSl834h65qyPBSOTo2WguSyRlh20Zr9Uad7f91c4
+}
+
+body:json {
+  {
+    "post_id": 2
+  }
+  
+}

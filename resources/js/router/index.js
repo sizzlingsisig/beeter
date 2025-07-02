@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/stores/authStore"; // Adjust this path if needed
 
 const routes = [
     {
@@ -51,14 +51,25 @@ const router = createRouter({
     routes,
 });
 
+// Navigation Guard
 router.beforeEach((to, from, next) => {
+    // List of public pages that do not require authentication
+    const publicPages = ["/", "/login", "/signup"];
+    const authRequired = !publicPages.includes(to.path);
+    // Pinia must have a store instance, so get it this way:
     const auth = useAuthStore();
 
-    if (to.meta.requiresAuth && !auth.token) {
-        next({ name: "Login" });
-    } else {
-        next();
+    // If route requires auth and user is not logged in, redirect to login
+    if (authRequired && !auth.token) {
+        return next("/login");
     }
+
+    // If user is logged in and tries to access login or signup, redirect to home
+    if ((to.path === "/login" || to.path === "/signup") && auth.token) {
+        return next("/home");
+    }
+
+    return next();
 });
 
 export default router;

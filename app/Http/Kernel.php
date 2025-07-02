@@ -53,12 +53,9 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-         // Spatie Laravel-Permission middleware:
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-    'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-    'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
-    'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
-
+        // Spatie Laravel-Permission middleware:
+        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
     ];
 
 }
