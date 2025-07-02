@@ -6,6 +6,9 @@ export const useUserStore = defineStore("user", {
         profile: null,
         loading: false,
         error: null,
+        summary: null,
+        summaryLoading: false,
+        summaryError: null,
     }),
     actions: {
         async fetchProfile() {
@@ -19,11 +22,14 @@ export const useUserStore = defineStore("user", {
                 this.loading = false;
             }
         },
-        async updateProfile(data) {
+        async updateProfile({ nickname, bio }) {
             this.loading = true;
             this.error = null;
             try {
-                this.profile = await UserService.updateMyProfile(data);
+                // Only send nickname and bio in the update payload
+                await UserService.updateMyProfile({ nickname, bio });
+                // After updating, refresh summary to keep UI in sync
+                await this.fetchSummary();
             } catch (err) {
                 this.error = err.response?.data?.message || err.message;
             } finally {
@@ -39,6 +45,17 @@ export const useUserStore = defineStore("user", {
                 this.error = err.response?.data?.message || err.message;
             } finally {
                 this.loading = false;
+            }
+        },
+        async fetchSummary() {
+            this.summaryLoading = true;
+            this.summaryError = null;
+            try {
+                this.summary = await UserService.fetchSummary();
+            } catch (err) {
+                this.summaryError = err.response?.data?.message || err.message;
+            } finally {
+                this.summaryLoading = false;
             }
         },
     },

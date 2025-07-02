@@ -6,6 +6,10 @@ export const useAuthStore = defineStore("auth", {
         user: null,
         token: localStorage.getItem("token") || null,
     }),
+    getters: {
+        isAuthenticated: (state) => !!state.token,
+        userName: (state) => state.user?.name ?? "",
+    },
     actions: {
         async register(payload) {
             await authService.register(payload);

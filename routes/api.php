@@ -21,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user-info', [UserInfoController::class, 'store']);
     Route::put('/user-info', [UserInfoController::class, 'update']);
     Route::get('/user-info', [UserInfoController::class, 'show']);
+    Route::get('/user-info/summary', [UserInfoController::class, 'summary']);
+
 
     // Categories: all authenticated users can view
     Route::get('/categories', [CategoryController::class, 'index']);

@@ -2,17 +2,23 @@ import api from "@/axios"; // your axios instance
 
 export default {
     async fetchMyProfile() {
-        const res = await api.get("/users/me");
+        const res = await api.get("/user-info");
         return res.data.data;
     },
 
     async updateMyProfile(payload) {
-        const res = await api.put("/users/me", payload);
+        // FIX: endpoint should be /user-info (not /users-info)
+        const res = await api.put("/user-info", payload);
         return res.data.data;
     },
 
     async register(payload) {
-        const res = await api.post("/users", payload);
+        const res = await api.post("/user-info", payload);
         return res.data.data;
+    },
+
+    async fetchSummary() {
+        const res = await api.get("/user-info/summary");
+        return res.data; // <- use .data only if backend responds directly with the summary object
     },
 };
